@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Thêm/Sửa Sản phẩm - Cửa hàng Laptop</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        background-color: #f5f5f5;
+      }
+
+      .navbar {
+        background-color: #333;
+        color: white;
+        padding: 1rem 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .brand {
+        font-size: 1.5rem;
+        font-weight: bold;
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+      }
+
+      .nav-links li {
+        margin-left: 1.5rem;
+      }
+
+      .nav-links a {
+        color: white;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      .nav-links a:hover {
+        color: #f0f0f0;
+      }
+
+      main {
+        max-width: 800px;
+        margin: 20px auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        color: #333;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+      }
+
+      .form-group textarea {
+        min-height: 100px;
+      }
+
+      .image-preview {
+        margin-top: 10px;
+        max-width: 300px;
+        max-height: 200px;
+      }
+
+      .image-preview img {
+        max-width: 100%;
+        max-height: 200px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 5px;
+      }
+
+      .img-upload-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .img-path {
+        flex-grow: 1;
+      }
+
+      button {
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        margin-right: 10px;
+      }
+
+      .btn-save {
+        background-color: #4caf50;
+        color: white;
+      }
+
+      .btn-cancel {
+        background-color: #f44336;
+        color: white;
+      }
+
+      .btn-upload {
+        background-color: #2196f3;
+        color: white;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .actions {
+        margin-top: 20px;
+        display: flex;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .nav-links {
+          margin-top: 1rem;
+          flex-direction: column;
+        }
+
+        .nav-links li {
+          margin: 0.5rem 0;
+          margin-left: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="container">
+        <div class="brand">Cửa hàng Laptop</div>
+        <ul class="nav-links">
+          <li><a href="index.html">Trang chủ</a></li>
+          <li><a href="index.html">Sản phẩm</a></li>
+          <li><a href="#">Liên hệ</a></li>
+          <li><a href="#">Giỏ hàng</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main>
+      <h1 id="page-title">Thêm sản phẩm mới</h1>
+
+      <form id="product-form">
+        <input type="hidden" id="product-id" />
+
+        <div class="form-group">
+          <label for="product-name">Tên sản phẩm:</label>
+          <input type="text" id="product-name" required />
+        </div>
+
+        <div class="form-group">
+          <label for="product-price">Giá (VND):</label>
+          <input type="number" id="product-price" required />
+        </div>
+
+        <div class="form-group">
+          <label for="product-brand">Thương hiệu:</label>
+          <input type="text" id="product-brand" required />
+        </div>
+
+        <div class="form-group">
+          <label for="product-quantity">Số lượng:</label>
+          <input type="number" id="product-quantity" required />
+        </div>
+
+        <div class="form-group">
+          <label for="product-description">Mô tả:</label>
+          <textarea id="product-description" rows="3" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="product-image">Hình ảnh sản phẩm:</label>
+          <div class="img-upload-container">
+            <input
+              type="text"
+              id="product-image"
+              class="img-path"
+              value="/Products/image-1.png"
+              readonly
+            />
+            <button type="button" id="select-image-btn" class="btn-upload">
+              Chọn ảnh
+            </button>
+          </div>
+          <input type="file" id="image-file" accept="image/*" class="hidden" />
+          <div class="image-preview">
+            <img
+              id="preview-image"
+              src="/Products/image-1.png"
+              alt="Hình ảnh sản phẩm"
+            />
+          </div>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn-save">Lưu sản phẩm</button>
+          <button type="button" id="cancel-btn" class="btn-cancel">Hủy</button>
+        </div>
+      </form>
+    </main>
+
+    <script>
+      // DOM Elements
+      const productForm = document.getElementById("product-form");
+      const pageTitle = document.getElementById("page-title");
+      const productIdField = document.getElementById("product-id");
+      const productNameField = document.getElementById("product-name");
+      const productPriceField = document.getElementById("product-price");
+      const productBrandField = document.getElementById("product-brand");
+      const productQuantityField = document.getElementById("product-quantity");
+      const productDescriptionField = document.getElementById(
+        "product-description"
+      );
+      const productImageField = document.getElementById("product-image");
+      const selectImageBtn = document.getElementById("select-image-btn");
+      const imageFileInput = document.getElementById("image-file");
+      const previewImage = document.getElementById("preview-image");
+      const cancelBtn = document.getElementById("cancel-btn");
+
+      // Kiểm tra xem có id trong URL không (sửa sản phẩm)
+      const urlParams = new URLSearchParams(window.location.search);
+      const productId = urlParams.get("id");
+
+      // Nếu có ID, tải thông tin sản phẩm
+      async function loadProductDetails() {
+        if (productId) {
+          pageTitle.textContent = "Chỉnh sửa sản phẩm";
+
+          try {
+            const response = await fetch(`/api/products/${productId}`);
+
+            if (!response.ok) {
+              throw new Error("Không tìm thấy sản phẩm");
+            }
+
+            const product = await response.json();
+
+            // Đổ dữ liệu vào form
+            productIdField.value = product.id;
+            productNameField.value = product.name;
+            productPriceField.value = product.price;
+            productBrandField.value = product.brand;
+            productQuantityField.value = product.quantity;
+            productDescriptionField.value = product.description;
+            productImageField.value = product.image;
+            previewImage.src = product.image;
+          } catch (error) {
+            console.error("Lỗi khi tải thông tin sản phẩm:", error);
+            alert("Không thể tải thông tin sản phẩm. Quay lại trang chính.");
+            window.location.href = "index.html";
+          }
+        }
+      }
+
+      // Xử lý sự kiện chọn ảnh
+      selectImageBtn.addEventListener("click", () => {
+        imageFileInput.click();
+      });
+
+      // Xử lý khi người dùng chọn file ảnh
+      imageFileInput.addEventListener("change", async (e) => {
+        if (e.target.files.length > 0) {
+          const file = e.target.files[0];
+
+          // Hiển thị preview
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            previewImage.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+
+          // Upload file lên server
+          const formData = new FormData();
+          formData.append("productImage", file);
+
+          try {
+            const response = await fetch("/api/upload", {
+              method: "POST",
+              body: formData,
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              productImageField.value = result.imagePath;
+              alert("Upload ảnh thành công!");
+            } else {
+              alert("Lỗi khi upload ảnh: " + result.message);
+            }
+          } catch (error) {
+            console.error("Lỗi khi upload ảnh:", error);
+            alert("Không thể kết nối đến server. Vui lòng thử lại sau.");
+          }
+        }
+      });
+
+      // Xử lý sự kiện submit form
+      productForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const newProduct = {
+          id: productIdField.value, // Rỗng nếu là thêm mới
+          name: productNameField.value,
+          price: parseInt(productPriceField.value),
+          brand: productBrandField.value,
+          quantity: parseInt(productQuantityField.value),
+          description: productDescriptionField.value,
+          image: productImageField.value,
+        };
+
+        try {
+          const response = await fetch("/api/products", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(newProduct),
+          });
+
+          const result = await response.json();
+
+          if (result.success) {
+            alert(
+              productId
+                ? "Cập nhật sản phẩm thành công!"
+                : "Thêm sản phẩm mới thành công!"
+            );
+            window.location.href = "index.html";
+          } else {
+            alert("Lỗi khi lưu sản phẩm: " + result.message);
+          }
+        } catch (error) {
+          console.error("Lỗi khi lưu sản phẩm:", error);
+          alert("Không thể kết nối đến server. Vui lòng thử lại sau.");
+        }
+      });
+
+      // Xử lý sự kiện nút hủy
+      cancelBtn.addEventListener("click", () => {
+        window.location.href = "index.html";
+      });
+
+      // Initialize
+      document.addEventListener("DOMContentLoaded", loadProductDetails);
+    </script>
+  </body>
+</html>
